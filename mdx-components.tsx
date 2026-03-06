@@ -11,33 +11,39 @@ type BlockquoteProps = ComponentPropsWithoutRef<'blockquote'>;
 
 const components = {
   h1: (props: HeadingProps) => (
-    <h1 className="font-medium pt-12 mb-0" {...props} />
+    <h1
+      className="font-bold text-3xl pt-12 mb-0 text-gray-800 dark:text-neutral-100"
+      {...props}
+    />
   ),
   h2: (props: HeadingProps) => (
     <h2
-      className="text-gray-800 dark:text-zinc-200 font-medium mt-8 mb-3"
+      className="text-gray-800 dark:text-neutral-100 text-lg font-bold mt-8 mb-3"
       {...props}
     />
   ),
   h3: (props: HeadingProps) => (
     <h3
-      className="text-gray-800 dark:text-zinc-200 font-medium mt-8 mb-3"
+      className="text-gray-800 dark:text-neutral-100 font-bold mt-8 mb-3"
       {...props}
     />
   ),
-  h4: (props: HeadingProps) => <h4 className="font-medium" {...props} />,
+  h4: (props: HeadingProps) => <h4 className="font-bold" {...props} />,
   p: (props: ParagraphProps) => (
-    <p className="text-gray-800 dark:text-zinc-300 leading-snug" {...props} />
+    <p
+      className="my-5 text-gray-800 dark:text-neutral-200 leading-[1.8]"
+      {...props}
+    />
   ),
   ol: (props: ListProps) => (
     <ol
-      className="text-gray-800 dark:text-zinc-300 list-decimal pl-5 space-y-2"
+      className="custom-ol my-5 text-gray-800 dark:text-neutral-200 list-none space-y-2 leading-[1.8]"
       {...props}
     />
   ),
   ul: (props: ListProps) => (
     <ul
-      className="text-gray-800 dark:text-zinc-300 list-disc pl-5 space-y-1"
+      className="my-5 text-gray-800 dark:text-neutral-200 list-disc pl-5 space-y-1 leading-[1.8]"
       {...props}
     />
   ),

@@ -3,29 +3,34 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/react';
 
-const inter = Inter({ subsets: ['latin'] });
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://next-mdx-blog.vercel.app'),
   alternates: {
-    canonical: '/'
+    canonical: '/',
   },
   title: {
-    default: 'John Smith',
-    template: '%s | John Smith'
+    default: 'siksik',
+    template: '%s | John Smith',
   },
-  description: 'My portfolio, blog, and personal website.'
+  description: 'My portfolio, blog, and personal website.',
 };
 
 export default function RootLayout({
-  children
+  children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.className}`}>
-      <body className="antialiased tracking-tight">
-        <div className="min-h-screen flex flex-col justify-between pt-0 md:pt-8 p-8 dark:bg-zinc-950 bg-white text-gray-900 dark:text-zinc-200">
+    <html lang="en" className={inter.variable}>
+      <body
+        className={`${inter.className} font-sans antialiased tracking-tight`}
+      >
+        <div className="min-h-screen flex flex-col justify-between pt-3 md:pt-20 p-8 dark:bg-neutral-900 bg-white text-gray-900 dark:text-white">
           <main className="max-w-[60ch] mx-auto w-full space-y-6">
             {children}
           </main>
@@ -39,10 +44,8 @@ export default function RootLayout({
 
 function Footer() {
   const links = [
-    { name: '@johnsmith', url: 'https://x.com/johnsmith' },
-    { name: 'youtube', url: 'https://www.youtube.com/@johnsmith' },
-    { name: 'linkedin', url: 'https://www.linkedin.com/in/johnsmith' },
-    { name: 'github', url: 'https://github.com/johnsmith' }
+    { name: 'github', url: 'https://github.com/sean113x' },
+    { name: 'sean113x@unist.ac.kr', url: 'mailto:sean113x@unist.ac.kr' },
   ];
 
   return (

@@ -1,13 +1,13 @@
 export const metadata = {
   title: '6 Sneaky JavaScript Patterns to Cut Boilerplate',
   alternates: {
-    canonical: '/n/2',
+    canonical: '/public/2',
   },
 };
 
 # 6 Sneaky JavaScript Patterns to Cut Boilerplate
 
-<br />
+<p>[by Seongsik](/) · March 6, 2026</p>
 
 Micro-optimizations and quality-of-life hacks to keep your scripts lean, readable, and bug-resistant.
 
@@ -17,13 +17,12 @@ Stop writing five nested guards:
 
 ```js
 // Old
-const theme = user && user.settings && user.settings.theme
-  ? user.settings.theme
-  : 'light';
+const theme =
+  user && user.settings && user.settings.theme ? user.settings.theme : 'light';
 
 // New
 const theme = user?.settings?.theme ?? 'light';
-````
+```
 
 Fewer lines, same safety.
 
@@ -77,13 +76,17 @@ const escape = (strings, ...values) =>
       acc +
       str +
       (values[i]
-        ? String(values[i]).replace(/[&<>"']/g, (s) => ({
-            '&': '&amp;',
-            '<': '&lt;',
-            '>': '&gt;',
-            '"': '&quot;',
-            "'": '&#39;',
-          })[s])
+        ? String(values[i]).replace(
+            /[&<>"']/g,
+            (s) =>
+              ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#39;',
+              })[s],
+          )
         : ''),
     '',
   );

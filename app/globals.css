@@ -1,7 +1,9 @@
 @import 'tailwindcss';
 
 @theme {
-  --font-family-sans: 'Inter', sans-serif;
+  --font-sans: var(--font-inter), sans-serif;
+  --font-serif: var(--font-inter), sans-serif;
+  --font-mono: var(--font-inter), sans-serif;
 }
 
 :root {
@@ -18,9 +20,12 @@
 html {
   min-width: 360px;
   scrollbar-gutter: stable;
+  font-size: 16px;
 }
 
 body {
+  font-family: var(--font-inter), sans-serif;
+  line-height: 1.8;
   text-rendering: optimizeLegibility;
 }
 
