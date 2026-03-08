@@ -1,5 +1,6 @@
 import { promises as fs } from 'fs';
 import type { Dirent } from 'fs';
+import type { Metadata } from 'next';
 import path from 'path';
 import { notFound } from 'next/navigation';
 
@@ -53,9 +54,46 @@ async function getPostExtension(slug: string) {
   return null;
 }
 
+function isValidSlug(slug: string) {
+  return /^[a-zA-Z0-9-]+$/.test(slug);
+}
+
+async function getPostTitle(slug: string, extension: 'md' | 'mdx') {
+  const post = await import(`../../../public/${slug}/page.${extension}`);
+  const metadata = (post as { metadata?: { title?: string } }).metadata;
+
+  if (metadata?.title) {
+    return metadata.title;
+  }
+
+  const source = await fs.readFile(
+    path.join(process.cwd(), 'public', slug, `page.${extension}`),
+    'utf8',
+  );
+  const match = source.match(/^-{3}\n([\s\S]*?)\n-{3}/);
+  if (!match) return null;
+
+  return match[1].match(/^title:\s*(.+)$/m)?.[1]?.trim() ?? null;
+}
+
 export async function generateStaticParams() {
   const slugs = await getAvailableSlugs();
   return slugs.map((slug) => ({ slug }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<Params>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  if (!isValidSlug(slug)) return {};
+
+  const extension = await getPostExtension(slug);
+  if (!extension) return {};
+
+  const title = await getPostTitle(slug, extension);
+  return title ? { title } : {};
 }
 
 export default async function Page({
@@ -64,7 +102,7 @@ export default async function Page({
   params: Promise<Params>;
 }) {
   const { slug } = await params;
-  if (!/^[a-zA-Z0-9-]+$/.test(slug)) {
+  if (!isValidSlug(slug)) {
     notFound();
   }
 
