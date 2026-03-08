@@ -7,6 +7,7 @@
 }
 
 :root {
+  --svg-filter: none;
   --sh-class: #7aa2f7;
   --sh-sign: #89ddff;
   --sh-string: #9ece6a;
@@ -15,6 +16,11 @@
   --sh-jsxliterals: #7aa2f7;
   --sh-property: #73daca;
   --sh-entity: #e0af68;
+}
+
+img[src$='.svg'],
+img[src*='.svg?'] {
+  filter: var(--svg-filter);
 }
 
 html {
@@ -80,6 +86,10 @@ code:not(pre code) span {
 }
 
 @media (prefers-color-scheme: dark) {
+  :root {
+    --svg-filter: invert(93%) hue-rotate(180deg);
+  }
+
   code {
     font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
     font-size: 14px;

@@ -4,6 +4,7 @@ import { highlight } from 'sugar-high';
 
 type HeadingProps = ComponentPropsWithoutRef<'h1'>;
 type ParagraphProps = ComponentPropsWithoutRef<'p'>;
+type OrderedListProps = ComponentPropsWithoutRef<'ol'>;
 type ListProps = ComponentPropsWithoutRef<'ul'>;
 type ListItemProps = ComponentPropsWithoutRef<'li'>;
 type AnchorProps = ComponentPropsWithoutRef<'a'>;
@@ -35,9 +36,9 @@ const components = {
       {...props}
     />
   ),
-  ol: (props: ListProps) => (
+  ol: (props: OrderedListProps) => (
     <ol
-      className="custom-ol my-5 text-gray-800 dark:text-neutral-200 list-none space-y-2 leading-[1.8]"
+      className="my-5 text-gray-800 dark:text-neutral-200 list-decimal list-inside space-y-2 leading-[1.8]"
       {...props}
     />
   ),
@@ -49,10 +50,10 @@ const components = {
   ),
   li: (props: ListItemProps) => <li className="pl-1" {...props} />,
   em: (props: ComponentPropsWithoutRef<'em'>) => (
-    <em className="font-medium" {...props} />
+    <em className="italic font-normal" {...props} />
   ),
   strong: (props: ComponentPropsWithoutRef<'strong'>) => (
-    <strong className="font-medium" {...props} />
+    <strong className="font-bold" {...props} />
   ),
   a: ({ href, children, ...props }: AnchorProps) => {
     const className =
