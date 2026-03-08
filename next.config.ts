@@ -7,7 +7,7 @@ export const sql = postgres(process.env.POSTGRES_URL!, {
 });
 
 const nextConfig: NextConfig = {
-  pageExtensions: ['mdx', 'ts', 'tsx'],
+  pageExtensions: ['md', 'mdx', 'ts', 'tsx'],
   async redirects() {
     if (!process.env.POSTGRES_URL) {
       return [];
@@ -24,14 +24,13 @@ const nextConfig: NextConfig = {
       permanent: !!permanent
     }));
   },
-  // Note: Using the Rust compiler means we cannot use
-  // rehype or remark plugins. If you need them, remove
-  // the `experimental.mdxRs` flag.
-  experimental: {
-    mdxRs: { mdxType: 'gfm' }
-  }
- };
+};
 
-const withMDX = createMDX({});
+const withMDX = createMDX({
+  extension: /\.(md|mdx)$/,
+  options: {
+    remarkPlugins: ['remark-frontmatter', ['remark-mdx-frontmatter', { name: 'metadata' }]],
+  },
+});
 
 export default withMDX(nextConfig);

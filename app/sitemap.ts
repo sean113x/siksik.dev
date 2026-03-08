@@ -9,7 +9,7 @@ async function getNoteSlugs(dir: string) {
     withFileTypes: true
   });
   return entries
-    .filter((entry) => entry.isFile() && entry.name === 'page.mdx')
+    .filter((entry) => entry.isFile() && (entry.name === 'page.md' || entry.name === 'page.mdx'))
     .map((entry) => {
       const relativePath = path.relative(
         dir,
