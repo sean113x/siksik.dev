@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/react';
 import { promises as fs } from 'fs';
+import type { Dirent } from 'fs';
 import path from 'path';
 import ArticleShell from './article-shell';
 
@@ -29,21 +30,35 @@ type PostMeta = {
 };
 
 async function getPublicPostMeta(): Promise<Record<string, PostMeta>> {
-  const postsDir = path.join(process.cwd(), 'app', 'public');
-  const entries = await fs.readdir(postsDir, {
-    recursive: true,
-    withFileTypes: true,
-  });
-
-  const pages = entries.filter(
-    (entry) =>
-      entry.isFile() && (entry.name === 'page.md' || entry.name === 'page.mdx'),
-  );
+  const postsDir = path.join(process.cwd(), 'public');
+  let entries: Dirent[];
+  try {
+    entries = await fs.readdir(postsDir, { withFileTypes: true });
+  } catch {
+    return {};
+  }
 
   const result: Record<string, PostMeta> = {};
 
-  for (const entry of pages) {
-    const filePath = path.join(entry.parentPath, entry.name);
+  for (const entry of entries) {
+    if (!entry.isDirectory()) continue;
+
+    const slug = entry.name;
+    let filePath: string | null = null;
+
+    for (const ext of ['md', 'mdx']) {
+      const candidate = path.join(postsDir, slug, `page.${ext}`);
+      try {
+        await fs.access(candidate);
+        filePath = candidate;
+        break;
+      } catch {
+        continue;
+      }
+    }
+
+    if (!filePath) continue;
+
     const source = await fs.readFile(filePath, 'utf8');
     const match = source.match(/^-{3}\n([\s\S]*?)\n-{3}/);
     if (!match) continue;
@@ -55,10 +70,6 @@ async function getPublicPostMeta(): Promise<Record<string, PostMeta>> {
       .replace(/^['"]|['"]$/g, '');
 
     if (!title || !date) continue;
-
-    const slug = path
-      .dirname(path.relative(postsDir, filePath))
-      .replace(/\\/g, '/');
     result[`/public/${slug}`] = { title, date };
   }
 
