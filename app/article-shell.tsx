@@ -25,7 +25,7 @@ function formatDate(date: string) {
 }
 
 export default function ArticleShell({ children, posts }: Props) {
-  const pathname = usePathname();
+  const pathname = usePathname().replace(/\/$/, '') || '/';
   const contentRef = useRef<HTMLDivElement>(null);
   const meta = posts[pathname];
   const linkClassName =
@@ -66,15 +66,17 @@ export default function ArticleShell({ children, posts }: Props) {
 
   return (
     <>
-      <h1 className="font-bold text-3xl mt-7 mb-0 text-gray-800 dark:text-neutral-100">
-        {meta.title}
-      </h1>
-      <p className="my-0 text-gray-800 dark:text-neutral-200 leading-[1.8]">
-        <Link href="/" className={linkClassName}>
-          by Seongsik
-        </Link>{' '}
-        · {formatDate(meta.date)}
-      </p>
+      <div className="flex flex-col gap-1.5">
+        <h1 className="font-bold text-3xl mt-7 mb-0 text-gray-800 dark:text-neutral-100">
+          {meta.title}
+        </h1>
+        <p className="mb-0 text-gray-800 dark:text-neutral-200 leading-[1.8]">
+          <Link href="/" className={linkClassName}>
+            by Seongsik
+          </Link>{' '}
+          · {formatDate(meta.date)}
+        </p>
+      </div>
       <div ref={contentRef}>{children}</div>
     </>
   );

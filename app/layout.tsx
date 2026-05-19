@@ -30,7 +30,7 @@ type PostMeta = {
 };
 
 async function getPublicPostMeta(): Promise<Record<string, PostMeta>> {
-  const postsDir = path.join(process.cwd(), 'public');
+  const postsDir = path.join(process.cwd(), 'app', 'public');
   let entries: Dirent[];
   try {
     entries = await fs.readdir(postsDir, { withFileTypes: true });
@@ -60,14 +60,23 @@ async function getPublicPostMeta(): Promise<Record<string, PostMeta>> {
     if (!filePath) continue;
 
     const source = await fs.readFile(filePath, 'utf8');
-    const match = source.match(/^-{3}\n([\s\S]*?)\n-{3}/);
-    if (!match) continue;
+    const frontmatter = source.match(/^-{3}\n([\s\S]*?)\n-{3}/)?.[1];
 
-    const title = match[1].match(/^title:\s*(.+)$/m)?.[1]?.trim();
-    const date = match[1]
-      .match(/^date:\s*(.+)$/m)?.[1]
+    let title = frontmatter?.match(/^title:\s*(.+)$/m)?.[1]?.trim();
+    let date = frontmatter
+      ?.match(/^date:\s*(.+)$/m)?.[1]
       ?.trim()
       .replace(/^['"]|['"]$/g, '');
+
+    if (!title || !date) {
+      const fallbackTitle = source.match(/^#\s+(.+)$/m)?.[1]?.trim();
+      const fallbackDate = source
+        .match(/<p>\s*\[by\s+Seongsik\]\(\/\)\s*·\s*([^<]+)\s*<\/p>/i)?.[1]
+        ?.trim();
+
+      title = title ?? fallbackTitle;
+      date = date ?? fallbackDate;
+    }
 
     if (!title || !date) continue;
     result[`/public/${slug}`] = { title, date };
